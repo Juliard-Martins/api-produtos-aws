@@ -1,0 +1,20 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      API_DOMAIN: ${API_DOMAIN:?informe o dominio em .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - dados_caddy:/data
+      - config_caddy:/config
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  dados_caddy:
+  config_caddy:

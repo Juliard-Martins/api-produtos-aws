@@ -1,0 +1,25 @@
+meta {
+  name: Consultar por ID
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/produtos/{{produtoId}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Responde HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Retorna o ID e os dados do cadastro", function () {
+    expect(res.getBody()).to.include({
+      id: Number(bru.getVar('produtoId')),
+      nome: 'Caderno',
+      precoCentavos: 1590
+    });
+  });
+}

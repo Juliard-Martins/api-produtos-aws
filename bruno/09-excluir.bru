@@ -1,0 +1,21 @@
+meta {
+  name: Excluir produto
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{baseUrl}}/produtos/{{produtoId}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Responde HTTP 204", function () {
+    expect(res.getStatus()).to.equal(204);
+  });
+
+  test("A resposta está sem corpo", function () {
+    expect(res.getBody()).to.satisfy(body => body === '' || body == null);
+  });
+}

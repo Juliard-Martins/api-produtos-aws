@@ -1,0 +1,21 @@
+meta {
+  name: Confirmar exclusão
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/produtos/{{produtoId}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Responde HTTP 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+
+  test("O registro excluído não é encontrado", function () {
+    expect(res.getBody().erro).to.equal('Produto não encontrado.');
+  });
+}

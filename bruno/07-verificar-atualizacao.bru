@@ -1,0 +1,21 @@
+meta {
+  name: Verificar atualização
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/produtos/{{produtoId}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Responde HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Uma nova leitura recupera as alterações", function () {
+    expect(res.getBody()).to.include({ nome: 'Caderno universitário', precoCentavos: 1990, estoque: 25 });
+  });
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Rejeitar preço negativo
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/produtos/{{produtoId}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "Caderno universitário",
+    "descricao": "Caderno pautado de 100 folhas",
+    "precoCentavos": -1,
+    "estoque": 25
+  }
+}
+
+tests {
+  test("Responde HTTP 400", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+
+  test("Identifica o campo inválido", function () {
+    expect(res.getBody().campos).to.have.property('precoCentavos');
+  });
+}

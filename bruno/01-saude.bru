@@ -1,0 +1,21 @@
+meta {
+  name: Saúde da API
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/health
+  body: none
+  auth: none
+}
+
+tests {
+  test("Responde HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("PostgreSQL acessível", function () {
+    expect(res.getBody().status).to.equal('ok');
+  });
+}

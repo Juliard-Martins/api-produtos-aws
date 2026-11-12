@@ -1,0 +1,23 @@
+meta {
+  name: Listar produtos
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/produtos
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Responde HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("A lista inclui o produto criado", function () {
+    const produtos = res.getBody();
+    expect(produtos).to.be.an('array');
+    expect(produtos.some(produto => produto.id === Number(bru.getVar('produtoId')))).to.equal(true);
+  });
+}

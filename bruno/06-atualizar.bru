@@ -1,0 +1,36 @@
+meta {
+  name: Atualizar produto
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{baseUrl}}/produtos/{{produtoId}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "Caderno universitário",
+    "descricao": "Caderno pautado de 100 folhas",
+    "precoCentavos": 1990,
+    "estoque": 25
+  }
+}
+
+tests {
+  test("Responde HTTP 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Retorna os valores atualizados", function () {
+    expect(res.getBody()).to.deep.equal({
+      id: Number(bru.getVar('produtoId')),
+      nome: 'Caderno universitário',
+      descricao: 'Caderno pautado de 100 folhas',
+      precoCentavos: 1990,
+      estoque: 25
+    });
+  });
+}
