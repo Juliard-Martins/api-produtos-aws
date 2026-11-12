@@ -65,6 +65,10 @@ npx --yes @usebruno/cli@4.3.0 run --env-file ../.env.runner.bru
 
 ## Implantar na AWS
 
+Use uma conta AWS do grupo ou um laboratório da faculdade que permita criar instâncias EC2. Quem se qualificar como novo cliente pode escolher o plano gratuito e conferir os tipos de instância e os créditos disponíveis no console. [Planos do AWS Free Tier](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/free-tier-plans.html)
+
+A máquina Ubuntu roda na AWS. O computador do grupo pode usar Windows, macOS ou Linux. O SSH e o SCP iniciam conexões de saída para o IPv4 público da EC2. O roteador local pode ficar com a configuração atual. A liberação de entrada é feita no grupo de segurança da instância.
+
 ### 1. Criar a instância e configurar SSH
 
 No EC2, lance uma instância **Ubuntu Server 24.04 LTS** em uma sub-rede pública com IPv4 público. Escolha um tipo disponível para a conta e confirme o custo no console. Associe um par de chaves e guarde o arquivo `.pem` no computador de quem administrará a instância.
@@ -75,12 +79,14 @@ No grupo de segurança, permita **TCP 22** com origem **My IP** ou o CIDR dos ad
 
 ### 2. Enviar o código e subir os serviços
 
-Compacte os arquivos versionados ou use o ZIP de código entregue. Do computador local, envie o arquivo e conecte-se por SSH. Substitua o nome da chave e `IP_PUBLICO` pelos valores da instância.
+Compacte os arquivos versionados ou use o ZIP de código entregue. Do computador local, envie o arquivo e conecte-se por SSH. Substitua o nome da chave e `IP_PUBLICO` pelos valores da instância. No Linux ou macOS, execute antes `chmod 400 chave-ec2.pem` para restringir a leitura da chave.
 
 ```sh
 scp -i chave-ec2.pem api-produtos-aws.zip ubuntu@IP_PUBLICO:~/api-produtos-aws.zip
 ssh -i chave-ec2.pem ubuntu@IP_PUBLICO
 ```
+
+Se o SSH não conectar pelo Windows, use `Test-NetConnection IP_PUBLICO -Port 22` no PowerShell. Se `TcpTestSucceeded` estiver como `False`, confira se a EC2 está em execução, se tem IPv4 público e se a regra SSH inclui o IP público atual da sua rede. Se a rede bloquear conexões de saída na porta 22, o terminal do [EC2 Instance Connect no navegador](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-connect-prerequisites.html) usa HTTPS e exige uma regra SSH para o serviço da AWS e permissão IAM.
 
 No Ubuntu, instale o Docker Engine com o plugin Compose pelo [guia oficial do Docker](https://docs.docker.com/engine/install/ubuntu/). Depois execute:
 
